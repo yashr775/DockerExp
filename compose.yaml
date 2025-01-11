@@ -1,0 +1,30 @@
+version: "3.8"
+name: dockerexp
+services:
+  nodeapp:
+    image: dockerexpapp
+    environment:
+      - PORT=4000
+      - MONGO_URI=mongodb://mongoadmin:password@mongodb
+    ports:
+      - 4000:4000
+    depends_on:
+      - mongodb  
+
+  mongodb:
+    image: mongo
+    container_name: dockerexpDB
+    ports:
+      - 27070:27017     
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME:admin    
+      - MONGO_INITDB_ROOT_PASSWORD:password
+
+  authservice: 
+    image: auth
+    ports:
+      - 5000:5000
+    depends_on:
+      - nodeapp
+    environment:
+      - PORT=5000
